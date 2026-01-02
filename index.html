@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الرئيسية | بنك أسئلة تنسيق الحدائق</title>
+    
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.rtlcss.com/bootstrap/v4.5.3/css/bootstrap.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap');
+
+        body {
+            direction: rtl;
+            font-size: 16px;
+            font-family: 'Cairo', sans-serif;
+            background-color: #f4f6f9;
+            overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        :root {
+            --color: #F28A24;
+            --dark: #212529;
+            --green: #28a745;
+            --blue: #17a2b8;
+        }
+
+        h1, h2, h3, h4, h5, p, a, span, div, label {
+            font-family: 'Cairo', sans-serif;
+        }
+
+        /* تنسيق الهيدر */
+        .navbar {
+            background-color: var(--dark);
+            border-bottom: 5px solid var(--color);
+            padding: 10px 0;
+            z-index: 100;
+        }
+
+        .header-logos {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            background: #fff;
+            padding: 5px 15px;
+            border-radius: 50px;
+            margin-left: 15px;
+        }
+
+        .header-logos img {
+            height: 50px;
+            width: auto;
+            transition: transform 0.3s;
+        }
+
+        .header-logos img:hover { transform: scale(1.1); }
+
+        /* كروت المحاضرات */
+        .card-lecture {
+            background: #fff;
+            border: none;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            height: 100%;
+            position: relative;
+            z-index: 2;
+            text-align: right;
+        }
+
+        .card-lecture:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(242, 138, 36, 0.2);
+        }
+
+        .card-lecture::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 5px;
+            height: 100%;
+            background: var(--color);
+            transition: width 0.3s;
+        }
+
+        .card-lecture:hover::before {
+            width: 100%;
+            opacity: 0.1;
+        }
+
+        .lecture-icon {
+            font-size: 2.5rem;
+            color: var(--color);
+            margin-bottom: 15px;
+            background: #fffcf5;
+            width: 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            border: 2px solid #eee;
+        }
+
+        .lecture-title {
+            font-weight: 800;
+            font-size: 1.2rem;
+            color: var(--dark);
+            margin-bottom: 10px;
+        }
+
+        .lecture-desc {
+            font-size: 0.9rem;
+            color: #6c757d;
+            margin-bottom: 20px;
+            min-height: 40px;
+        }
+
+        .btn-start {
+            background-color: var(--dark);
+            color: #fff;
+            border-radius: 50px;
+            padding: 8px 25px;
+            font-weight: 600;
+            transition: 0.3s;
+            width: 100%;
+        }
+
+        .btn-start:hover {
+            background-color: var(--color);
+            color: #fff;
+            text-decoration: none;
+        }
+
+        /* الخلفية المتحركة */
+        .background-shapes {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            overflow: hidden;
+            pointer-events: none;
+            background-image: radial-gradient(#e0e0e0 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+
+        .shape {
+            position: absolute;
+            opacity: 0.1;
+            animation: float 20s infinite linear;
+        }
+        .shape.square { width: 80px; height: 80px; border: 4px solid var(--color); }
+        .shape.circle { width: 120px; height: 120px; border: 4px solid var(--dark); border-radius: 50%; }
+
+        @keyframes float {
+            0% { transform: translateY(0) rotate(0deg); }
+            100% { transform: translateY(-100vh) rotate(360deg); }
+        }
+
+        footer {
+            margin-top: auto;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- الخلفية -->
+    <div class="background-shapes">
+        <div class="shape square" style="left: 10%; bottom: -10%; animation-duration: 15s;"></div>
+        <div class="shape circle" style="left: 80%; bottom: -20%; animation-duration: 25s;"></div>
+    </div>
+
+    <!-- الهيدر -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center">
+                <i class="fas fa-leaf fa-2x text-warning ml-3"></i>
+                <div>
+                    <h4 class="text-white mb-0 font-weight-bold">تنسيق الحدائق وهندسة المواقع</h4>
+                    <span class="text-white-50 small">كود المقرر: UPD141</span>
+                </div>
+            </div>
+            <div class="header-logos">
+                <img src="pud_logo.png" alt="PUD">
+                <img src="eng_logo.png" alt="ENG">
+                <img src="tanta_logo.png" alt="Tanta">
+            </div>
+        </div>
+    </nav>
+
+    <div class="container d-md-none mt-3">
+        <div class="header-logos-mobile bg-white rounded-pill p-2 shadow-sm text-center">
+            <img src="pud_logo.png" style="height:40px" alt="PUD">
+            <img src="eng_logo.png" style="height:40px" alt="ENG">
+            <img src="tanta_logo.png" style="height:40px" alt="Tanta">
+        </div>
+    </div>
+
+    <!-- المحتوى الرئيسي -->
+    <div class="container my-5" style="position: relative; z-index: 2;">
+        
+        <div class="text-center mb-5">
+            <h1 class="display-4 font-weight-bold" style="color: var(--dark);">بنك الأسئلة الشامل</h1>
+            <p class="lead text-muted">اختر المحاضرة للبدء في الاختبار التفاعلي</p>
+            <div style="width: 100px; height: 5px; background: var(--color); margin: 20px auto; border-radius: 50px;"></div>
+        </div>
+
+        <div class="row">
+
+            <!-- المحاضرة 1 -->
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card card-lecture p-4">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div class="lecture-icon"><i class="fas fa-seedling"></i></div>
+                        <span class="badge badge-secondary">Lec 01</span>
+                    </div>
+                    <h5 class="lecture-title">مقدمة وتنسيق الموقع</h5>
+                    <p class="lecture-desc">المفاهيم الأساسية، الخطوات، تحليل الموقع، والبيانات.</p>
+                    <a href="lec1.html" class="btn btn-start"><i class="fas fa-play ml-2"></i> ابدأ الاختبار</a>
+                </div>
+            </div>
+
+            <!-- المحاضرة 2 -->
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card card-lecture p-4">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div class="lecture-icon"><i class="fas fa-city"></i></div>
+                        <span class="badge badge-secondary">Lec 02</span>
+                    </div>
+                    <h5 class="lecture-title">الفراغات العمرانية</h5>
+                    <p class="lecture-desc">تعريف الفراغات، تصنيفاتها (11 تصنيف)، ونظرية كيفن لينش.</p>
+                    <a href="lec2.html" class="btn btn-start"><i class="fas fa-play ml-2"></i> ابدأ الاختبار</a>
+                </div>
+            </div>
+
+            <!-- المحاضرة 3 -->
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card card-lecture p-4">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div class="lecture-icon"><i class="fas fa-history"></i></div>
+                        <span class="badge badge-secondary">Lec 03</span>
+                    </div>
+                    <h5 class="lecture-title">التطور التاريخي (1)</h5>
+                    <p class="lecture-desc">العصور القديمة: الفرعونية، البابلية، الفارسية، الرومانية، والأندلسية.</p>
+                    <a href="lec3.html" class="btn btn-start"><i class="fas fa-play ml-2"></i> ابدأ الاختبار</a>
+                </div>
+            </div>
+
+            <!-- المحاضرة 4 -->
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card card-lecture p-4">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div class="lecture-icon"><i class="fas fa-landmark"></i></div>
+                        <span class="badge badge-secondary">Lec 04</span>
+                    </div>
+                    <h5 class="lecture-title">التطور التاريخي (2)</h5>
+                    <p class="lecture-desc">الحدائق الأوروبية (إيطالي، فرنسي، إنجليزي)، الفيكتورية، واليابانية.</p>
+                    <a href="lec4.html" class="btn btn-start"><i class="fas fa-play ml-2"></i> ابدأ الاختبار</a>
+                </div>
+            </div>
+
+            <!-- المحاضرة 5 -->
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card card-lecture p-4">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div class="lecture-icon"><i class="fas fa-cubes"></i></div>
+                        <span class="badge badge-secondary">Lec 05</span>
+                    </div>
+                    <h5 class="lecture-title">عناصر التصميم الأساسية</h5>
+                    <p class="lecture-desc">النقطة، الخط، المستوى، الحجم، والخصائص البصرية (اللون والملمس).</p>
+                    <a href="lec5.html" class="btn btn-start"><i class="fas fa-play ml-2"></i> ابدأ الاختبار</a>
+                </div>
+            </div>
+
+            <!-- المحاضرة 6 -->
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card card-lecture p-4">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div class="lecture-icon"><i class="fas fa-ruler-combined"></i></div>
+                        <span class="badge badge-secondary">Lec 06</span>
+                    </div>
+                    <h5 class="lecture-title">مبادئ التصميم</h5>
+                    <p class="lecture-desc">المحاور، المقياس، الوحدة، التوازن، السيادة، الإيقاع، والتنافر.</p>
+                    <a href="lec6.html" class="btn btn-start"><i class="fas fa-play ml-2"></i> ابدأ الاختبار</a>
+                </div>
+            </div>
+
+            <!-- المحاضرة 7 -->
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card card-lecture p-4">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div class="lecture-icon"><i class="fas fa-drafting-compass"></i></div>
+                        <span class="badge badge-secondary">Lec 07</span>
+                    </div>
+                    <h5 class="lecture-title">تطبيق المبادئ</h5>
+                    <p class="lecture-desc">اتخاذ القرار التصميمي وتطبيقات عملية على مبادئ التصميم.</p>
+                    <a href="lec7.html" class="btn btn-start"><i class="fas fa-play ml-2"></i> ابدأ الاختبار</a>
+                </div>
+            </div>
+
+            <!-- المحاضرة 8 + 9 -->
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card card-lecture p-4" style="border-bottom: 5px solid var(--green);">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div class="lecture-icon" style="color: var(--green);"><i class="fas fa-users"></i></div>
+                        <span class="badge badge-success">Lec 08 + 09</span>
+                    </div>
+                    <h5 class="lecture-title">مشروع التوحد + الحدائق</h5>
+                    <p class="lecture-desc">فراغات الأطفال المصابين بالتوحد + أنواع وتخطيط المنتزهات العامة.</p>
+                    <a href="lec8_9.html" class="btn btn-start" style="background: var(--green);"><i class="fas fa-play ml-2"></i> ابدأ الاختبار</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <footer class="text-center text-white py-4 mt-auto" style="background-color: var(--dark);">
+        <p class="mb-0 font-weight-bold">جامعة طنطا - كلية الهندسة - قسم التخطيط والتصميم العمراني</p>
+        <small class="text-white-50">تم التطوير للمساعدة في مراجعة مادة تنسيق الحدائق وهندسة المواقع</small>
+    </footer>
+
+</body>
+</html>

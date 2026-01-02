@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اختبار شامل: تنسيق الحدائق وهندسة المواقع</title>
+    
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.rtlcss.com/bootstrap/v4.5.3/css/bootstrap.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap');
+
+        body {
+            direction: rtl;
+            font-size: 16px;
+            font-family: 'Cairo', sans-serif;
+            background-color: #f4f6f9;
+            overflow-x: hidden;
+        }
+
+        :root {
+            --color: #F28A24;
+            --dark: #212529;
+            --green: #28a745;
+            --red: #dc3545;
+        }
+
+        h1, h2, h3, h4, h5, p, a, span, div, label {
+            font-family: 'Cairo', sans-serif;
+            text-align: right;
+        }
+
+        /* تنسيق الهيدر واللوجوهات */
+        .navbar {
+            background-color: var(--dark);
+            border-bottom: 5px solid var(--color);
+            padding: 10px 0;
+            z-index: 100;
+            position: relative;
+        }
+
+        .header-logos {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            background: #fff;
+            padding: 5px 15px;
+            border-radius: 50px;
+            margin-left: 15px;
+        }
+
+        .header-logos img {
+            height: 50px;
+            width: auto;
+            transition: transform 0.3s;
+        }
+
+        .header-logos img:hover {
+            transform: scale(1.1);
+        }
+
+        .navbar-brand {
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        @media (max-width: 768px) {
+            .header-logos { display: none; }
+            .header-logos-mobile {
+                display: flex;
+                justify-content: center;
+                margin-bottom: 10px;
+            }
+            .header-logos-mobile img {
+                height: 40px;
+                margin: 0 5px;
+            }
+        }
+
+        /* الأزرار */
+        .btn-warning {
+            background-color: var(--color);
+            border-color: var(--color);
+            color: #FFF;
+            padding: 12px 40px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-warning:hover {
+            background-color: #d6761b;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(242, 138, 36, 0.4);
+        }
+
+        /* كارت الاختبار */
+        .quiz-container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+            position: relative;
+            z-index: 2;
+            margin-top: 50px;
+            margin-bottom: 50px;
+            border-top: 6px solid var(--color);
+            backdrop-filter: blur(10px);
+        }
+
+        /* صناديق الأسئلة */
+        .question-box {
+            background: #fff;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border: 1px solid #eee;
+            border-right: 5px solid #ddd;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .question-box:hover {
+            border-right-color: var(--color);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transform: translateX(-5px);
+        }
+
+        .question-title {
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 15px;
+            font-size: 18px;
+            line-height: 1.6;
+        }
+
+        /* خيارات الإجابة */
+        .options label {
+            display: block;
+            padding: 12px 20px;
+            background: #f8f9fa;
+            border: 2px solid transparent;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+            font-weight: 600;
+            color: #555;
+        }
+
+        .options input[type="radio"] {
+            margin-left: 10px;
+            transform: scale(1.2);
+        }
+
+        .options label:hover {
+            background: #fffcf5;
+            border-color: var(--color);
+            color: var(--color);
+        }
+
+        .options input[type="radio"]:checked + span {
+            color: var(--color);
+        }
+
+        /* التغذية الراجعة داخل السؤال (أثناء الحل) */
+        .feedback {
+            margin-top: 15px;
+            font-size: 15px;
+            padding: 15px;
+            border-radius: 8px;
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+
+        .question-box.correct-box {
+            border-right-color: var(--green);
+            background-color: #f0fff4;
+        }
+
+        .question-box.wrong-box {
+            border-right-color: var(--red);
+            background-color: #fff5f5;
+        }
+
+        /* أقسام الاختبار */
+        .section-header {
+            background: var(--dark);
+            color: #fff;
+            padding: 15px 25px;
+            border-radius: 10px;
+            margin: 50px 0 30px 0;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .section-header::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent 40%, rgba(255,255,255,0.1) 50%, transparent 60%);
+            animation: shine 3s infinite;
+        }
+
+        @keyframes shine {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        /* صندوق النتيجة */
+        .result-box {
+            display: none;
+            text-align: center;
+            padding: 40px;
+            background: var(--dark);
+            color: #fff;
+            border-radius: 20px;
+            margin-top: 40px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+            position: relative;
+        }
+
+        .result-score {
+            font-size: 4rem;
+            color: var(--color);
+            font-weight: 800;
+            margin: 20px 0;
+        }
+
+        /* =========================================
+           تنسيق قسم "سجل الأخطاء" الجديد
+           ========================================= */
+        #mistakesReport {
+            display: none;
+            margin-top: 30px;
+            text-align: right;
+            background: #fff;
+            border-radius: 15px;
+            padding: 20px;
+            color: #333;
+        }
+
+        .mistake-card {
+            border: 1px solid #eee;
+            border-right: 5px solid var(--red);
+            padding: 15px;
+            margin-bottom: 15px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.05);
+        }
+
+        .mistake-question {
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+
+        .answer-comparison {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            background: #f9f9f9;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .user-answer {
+            color: var(--red);
+            font-weight: 600;
+        }
+
+        .correct-answer-text {
+            color: var(--green);
+            font-weight: 600;
+        }
+
+        /* الخلفية المتحركة */
+        .background-shapes {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            overflow: hidden;
+            pointer-events: none;
+            background-image: radial-gradient(#e0e0e0 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+
+        .shape {
+            position: absolute;
+            opacity: 0.15;
+            animation: float 20s infinite linear;
+        }
+
+        .shape.square { width: 80px; height: 80px; border: 4px solid var(--color); }
+        .shape.circle { width: 120px; height: 120px; border: 4px solid var(--dark); border-radius: 50%; }
+        .shape.triangle { 
+            width: 0; height: 0; 
+            border-left: 40px solid transparent; 
+            border-right: 40px solid transparent; 
+            border-bottom: 80px solid var(--color); 
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0) rotate(0deg); }
+            100% { transform: translateY(-100vh) rotate(360deg); }
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- الخلفية الهندسية -->
+    <div class="background-shapes">
+        <div class="shape square" style="left: 10%; bottom: -10%; animation-duration: 15s;"></div>
+        <div class="shape circle" style="left: 20%; bottom: -20%; animation-duration: 25s; animation-delay: 2s;"></div>
+        <div class="shape triangle" style="left: 35%; bottom: -15%; animation-duration: 18s;"></div>
+        <div class="shape square" style="left: 50%; bottom: -30%; border-color: var(--dark); animation-duration: 30s;"></div>
+        <div class="shape circle" style="left: 70%; bottom: -10%; border-color: var(--color); animation-duration: 22s;"></div>
+        <div class="shape triangle" style="left: 85%; bottom: -25%; border-bottom-color: var(--dark); animation-duration: 20s;"></div>
+        <div class="shape square" style="left: 90%; bottom: -5%; animation-duration: 12s;"></div>
+    </div>
+
+    <!-- الهيدر -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container d-flex justify-content-between align-items-center">
+            
+            <div class="d-flex align-items-center">
+                <i class="fas fa-leaf fa-2x text-warning ml-3"></i>
+                <div>
+                    <h4 class="text-white mb-0 font-weight-bold">تنسيق الحدائق وهندسة المواقع</h4>
+                    <span class="text-white-50 small">كود المقرر: UPD141</span>
+                </div>
+            </div>
+
+            <!-- ⚠️ قم بتغيير أسماء الصور هنا -->
+            <div class="header-logos">
+                <img src="pud_logo.png" alt="PUD Logo" title="قسم التخطيط">
+                <img src="eng_logo.png" alt="Faculty Logo" title="كلية الهندسة">
+                <img src="tanta_logo.png" alt="University Logo" title="جامعة طنطا">
+            </div>
+
+        </div>
+    </nav>
+
+    <div class="container d-md-none mt-3">
+        <div class="header-logos-mobile bg-white rounded-pill p-2 shadow-sm">
+            <img src="pud_logo.png" alt="PUD">
+            <img src="eng_logo.png" alt="ENG">
+            <img src="tanta_logo.png" alt="Tanta">
+        </div>
+    </div>
+
+    <!-- المحتوى -->
+    <div class="container">
+        <div class="quiz-container">
+            <div class="text-center mb-5">
+                <h2 style="color: var(--color); font-weight: 800;">اختبار المحاضرة الأولى</h2>
+                <p class="lead text-muted">تغطية شاملة: التعريفات، الخطوات، العناصر، الأدوات، ودراسة الحالة</p>
+                <div style="width: 80px; height: 5px; background: var(--color); margin: 10px auto; border-radius: 10px;"></div>
+                <span class="badge badge-dark p-2 mt-2">50 سؤال</span>
+            </div>
+
+            <form id="quizForm">
+                
+                <div class="section-header"><h4><i class="fas fa-brain ml-2"></i> أولاً: المفاهيم والتعريفات</h4></div>
+                <div id="section1-container"></div>
+
+                <div class="section-header" style="background: linear-gradient(45deg, #1e3c72, #2a5298);"><h4><i class="fas fa-project-diagram ml-2"></i> ثانياً: خطوات التصميم والتحليل</h4></div>
+                <div id="section2-container"></div>
+
+                <div class="section-header" style="background: linear-gradient(45deg, #11998e, #38ef7d);"><h4><i class="fas fa-tree ml-2"></i> ثالثاً: العناصر (Softscape & Hardscape)</h4></div>
+                <div id="section3-container"></div>
+
+                <div class="section-header" style="background: linear-gradient(45deg, #cb2d3e, #ef473a);"><h4><i class="fas fa-laptop-code ml-2"></i> رابعاً: أدوات وتقنيات حديثة</h4></div>
+                <div id="section4-container"></div>
+
+                <div class="section-header"><h4><i class="fas fa-check-double ml-2"></i> خامساً: أسئلة الصواب والخطأ (True/False)</h4></div>
+                <div id="tf-container"></div>
+
+                <div class="text-center mt-5">
+                    <button type="button" class="btn btn-warning btn-lg pulse-button" onclick="calculateResult()">
+                        <i class="fas fa-clipboard-check ml-2"></i> إنهاء الاختبار وعرض النتيجة
+                    </button>
+                </div>
+
+            </form>
+
+            <!-- صندوق النتيجة -->
+            <div id="resultBox" class="result-box">
+                <i class="fas fa-award fa-3x text-warning mb-3"></i>
+                <h3>نتيجتك النهائية</h3>
+                <div class="result-score" id="scoreDisplay">0 / 50</div>
+                <p id="scoreMessage" class="lead"></p>
+                
+                <!-- زر عرض الأخطاء الجديد -->
+                <button id="btnShowMistakes" class="btn btn-outline-light mt-2 mb-3" style="display: none;" onclick="toggleMistakes()">
+                    <i class="fas fa-exclamation-triangle ml-2"></i> عرض سجل الأخطاء وتصحيحها
+                </button>
+
+                <!-- منطقة تقرير الأخطاء -->
+                <div id="mistakesReport">
+                    <h4 class="text-dark border-bottom pb-2 mb-3">سجل الإجابات الخاطئة</h4>
+                    <div id="mistakesList"></div>
+                </div>
+
+                <hr style="border-top: 1px solid #555;">
+                <button class="btn btn-light mt-3" onclick="location.reload()">
+                    <i class="fas fa-redo ml-2"></i> إعادة المحاولة
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <footer class="text-center text-white py-4 mt-5" style="background-color: var(--dark);">
+        <p class="mb-0 font-weight-bold">جامعة طنطا - كلية الهندسة - قسم التخطيط والتصميم العمراني</p>
+        <small class="text-white-50">إعداد: أ.م.د لبنى عبد الله أغا | تنسيق الحدائق وهندسة المواقع</small>
+    </footer>
+
+    <!-- السكربت -->
+    <script>
+        // قاعدة بيانات الأسئلة
+        const questions = [
+            // === القسم الأول: المفاهيم ===
+            {
+                q: "ما هو التعريف الأدق لـ 'هندسة المواقع' (Site Engineering)؟",
+                options: ["فن تجميل الواجهات.", "دراسة شاملة للموقع لتحديد أفضل استخدام للمساحة مع مراعاة البيئة.", "تصميم شبكات الري فقط.", "توزيع النباتات عشوائياً."],
+                a: 1, type: "section1"
+            },
+            {
+                q: "تنسيق الحدائق هو فن يجمع بين:",
+                options: ["الهندسة فقط.", "علم الأحياء فقط.", "الجمال والوظيفة العملية.", "التكلفة العالية والرفاهية."],
+                a: 2, type: "section1"
+            },
+            {
+                q: "أحد أهداف 'التصميم العمراني' هو:",
+                options: ["تصميم الغرف الداخلية.", "رفع مستوى جودة الحياة وتوفير بيئة ملائمة.", "حساب الأحمال الإنشائية للأعمدة.", "تخطيط الطرق السريعة بين المحافظات."],
+                a: 1, type: "section1"
+            },
+            {
+                q: "المشكلة التصميمية تتسم بأنها:",
+                options: ["لها بعد واحد فقط (التكلفة).", "لها أبعاد متعددة (وظيفة، جمال، تكلفة، متانة).", "سهلة الحل دائماً.", "تعتمد على النباتات فقط."],
+                a: 1, type: "section1"
+            },
+            {
+                q: "أي مما يلي يعتبر من فوائد تنسيق الحدائق على 'البيئة'؟",
+                options: ["زيادة قيمة العقار.", "تقليل التوتر النفسي.", "تحسين نوعية الهواء وامتصاص ثاني أكسيد الكربون.", "توفير أماكن للجلوس."],
+                a: 2, type: "section1"
+            },
+            {
+                q: "الهدف من تعلم التصميم يشمل تطوير القدرة على:",
+                options: ["الحفظ الصم.", "الرسم بدون تفكير.", "اتخاذ القرارات (مثل المواد والألوان).", "إلغاء البدائل المتاحة."],
+                a: 2, type: "section1"
+            },
+            {
+                q: "الإبداع في التصميم يهدف إلى إبراز:",
+                options: ["العصر التاريخي والمستوى الثقافي.", "الأخطاء الشائعة.", "التكرار الممل.", "المساحات الفارغة."],
+                a: 0, type: "section1"
+            },
+            {
+                q: "الفرق بين Urban Planning و Urban Design:",
+                options: ["لا يوجد فرق.", "التخطيط أشمل (استراتيجيات كبرى)، والتصميم يركز على الفراغات والتفاصيل.", "التصميم للمدن، والتخطيط للحدائق.", "التخطيط يعنى بالمباني فقط."],
+                a: 1, type: "section1"
+            },
+            // === القسم الثاني: الخطوات ===
+            {
+                q: "الخطوة الأولى في خطوات تنسيق الحدائق هي:",
+                options: ["تحليل البيانات.", "وضع الحلول الأولية.", "تجميع البيانات (Briefing Stage).", "التنفيذ."],
+                a: 2, type: "section2"
+            },
+            {
+                q: "دراسة 'الرياح والشمس' تتم في مرحلة:",
+                options: ["تجميع البيانات.", "تحليل البيانات (Data Analysis).", "التقييم.", "التنفيذ."],
+                a: 1, type: "section2"
+            },
+            {
+                q: "المرحلة التي يتم فيها وضع مخطط العلاقات الوظيفية وتحديد الفكرة تسمى:",
+                options: ["Evaluation.", "Data Collection.", "Concept (تولد المبدأ التصميمي).", "Primary Solution."],
+                a: 2, type: "section2"
+            },
+            {
+                q: "رسم المساقط وتحديد الشكل الأولي والواجهات يتم في خطوة:",
+                options: ["الحلول الأولية (Primary Solution).", "التحليل.", "جرد الموقع.", "الصيانة."],
+                a: 0, type: "section2"
+            },
+            {
+                q: "'جرد الموقع' (Site Inventory) يعني:",
+                options: ["شراء النباتات.", "تسجيل دقيق لكل ما هو موجود بالموقع (تربة، نباتات، ظل).", "هدم المباني الموجودة.", "تصميم شبكة الري."],
+                a: 1, type: "section2"
+            },
+            {
+                q: "الأداة المستخدمة لتحديد مشاكل الصرف والري هي:",
+                options: ["تحليل الضوضاء.", "الخرائط الطبوغرافية (قياس التضاريس).", "برامج الفوتوشوب.", "دراسة الحركة."],
+                a: 1, type: "section2"
+            },
+            {
+                q: "تحليل التربة يفيد في:",
+                options: ["معرفة اتجاه الرياح.", "تحديد نوعية النباتات المناسبة ومتطلبات التسميد.", "تصميم الإضاءة.", "رصف الطرق."],
+                a: 1, type: "section2"
+            },
+            {
+                q: "دراسة الشمس والظل تساعد في:",
+                options: ["تحديد أفضل مواقع للنباتات (محبة للشمس أو الظل).", "قياس سرعة الرياح.", "تحليل التربة كيميائياً.", "بناء الأسوار."],
+                a: 0, type: "section2"
+            },
+            // === القسم الثالث: العناصر ===
+            {
+                q: "عناصر الـ Softscape تشمل:",
+                options: ["الممرات والمباني.", "النباتات، الماء، والتضاريس.", "الأعمدة والإنارة.", "الشبكات والخدمات."],
+                a: 1, type: "section3"
+            },
+            {
+                q: "عناصر الـ Hardscape تشمل:",
+                options: ["الأشجار والشجيرات.", "الأرضيات، الجلسات، الأسوار، والإضاءة.", "البحيرات الطبيعية.", "التربة."],
+                a: 1, type: "section3"
+            },
+            {
+                q: "من أمثلة الأشجار (Trees) التي توفر الظل:",
+                options: ["الورد.", "الكافور والجميز.", "النجيلة.", "الجهنمية."],
+                a: 1, type: "section3"
+            },
+            {
+                q: "وظيفة الشجيرات (Shrubs) الأساسية:",
+                options: ["تغطية الأرضيات.", "عمل أسيجة نباتية وفصل الفراغات.", "توفير ظل كامل للموقع.", "تسلق الجدران."],
+                a: 1, type: "section3"
+            },
+            {
+                q: "نباتات تستخدم لتغطية الأسوار والبرجولات:",
+                options: ["المتسلقات (Climbers).", "المسطحات الخضراء (Lawns).", "النباتات المائية.", "الأشجار الضخمة."],
+                a: 0, type: "section3"
+            },
+            {
+                q: "من أمثلة النباتات المائية:",
+                options: ["الصبار.", "اللوتس والبردي.", "الفيكس.", "النجيلة."],
+                a: 1, type: "section3"
+            },
+            {
+                q: "حشيش برمودا (Bermuda Grass) يعتبر من:",
+                options: ["الأشجار.", "المسطحات الخضراء (Lawns).", "المتسلقات.", "الشجيرات."],
+                a: 1, type: "section3"
+            },
+            {
+                q: "البرجولات (Pergolas) تصنف ضمن:",
+                options: ["Softscape.", "Hardscape.", "Utilities.", "Natural Elements."],
+                a: 1, type: "section3"
+            },
+            {
+                q: "العناصر المائية الصناعية (Artificial Water Features) مثل النافورات وظيفتها:",
+                options: ["جمالية فقط.", "حركة وصوت وتلطيف الجو (تبريد).", "ري النباتات.", "تخزين المياه."],
+                a: 1, type: "section3"
+            },
+            {
+                q: "وظيفة العناصر الأرضية (Landform) تشمل:",
+                options: ["توجيه الصرف وإضافة بعد فراغي.", "الإضاءة الليلية.", "توفير مقاعد للجلوس.", "توليد الكهرباء."],
+                a: 0, type: "section3"
+            },
+            {
+                q: "العناصر الخدمية (Utilities) تشمل:",
+                options: ["التماثيل.", "شبكات الري والصرف والكهرباء.", "الأشجار.", "الممرات."],
+                a: 1, type: "section3"
+            },
+            {
+                q: "من الأمثلة على العناصر الفنية والزخرفية (Ornaments):",
+                options: ["أعمدة الإنارة.", "التماثيل والجداريات.", "المقاعد الخشبية.", "التربة."],
+                a: 1, type: "section3"
+            },
+            // === القسم الرابع: تقنيات وحالة دراسية ===
+            {
+                q: "من البرامج الحديثة المستخدمة في التصميم:",
+                options: ["Word & Excel.", "Garden Planner & AutoCAD.", "PowerPoint.", "Paint."],
+                a: 1, type: "section4"
+            },
+            {
+                q: "أنظمة الري الذكية تتميز بـ:",
+                options: ["زيادة استهلاك المياه.", "استشعار الرطوبة والتحكم عن بعد لتوفير المياه.", "صعوبة الاستخدام.", "عدم الجدوى."],
+                a: 1, type: "section4"
+            },
+            {
+                q: "في دراسة الحالة (الحديقة المنزلية 50م)، تم اختيار نباتات:",
+                options: ["استوائية تحتاج مياه غزيرة.", "مقاومة للجفاف (مثل الصبار والريحان).", "أشجار غابات ضخمة.", "نباتات ظل فقط."],
+                a: 1, type: "section4"
+            },
+            {
+                q: "مدة تعرض الحديقة للشمس في دراسة الحالة كانت:",
+                options: ["ساعة واحدة.", "6 ساعات يومياً.", "12 ساعة.", "بدون شمس."],
+                a: 1, type: "section4"
+            },
+            {
+                q: "الإضاءة المخفية (LED) تستخدم لـ:",
+                options: ["إنارة الشوارع العامة فقط.", "إبراز جمال الحديقة ليلاً وخلق أجواء ساحرة.", "تسخين النباتات.", "طرد الحشرات."],
+                a: 1, type: "section4"
+            },
+            // === القسم الخامس: صح وخطأ (18 سؤال) ===
+            { q: "التصميم العمراني هو الأداة الوحيدة التي ترسم أسلوب المعيشة.", options: ["صواب", "خطأ"], a: 1, type: "tf" },
+            { q: "تشمل عناصر التصميم العمراني واجهات المباني والرصف والإنارة.", options: ["صواب", "خطأ"], a: 0, type: "tf" },
+            { q: "يتم تحديد تشريعات البناء في مرحلة 'تحليل البيانات'.", options: ["صواب", "خطأ"], a: 1, type: "tf" },
+            { q: "الرياح والشمس تتبع مرحلة 'تجميع البيانات'.", options: ["صواب", "خطأ"], a: 1, type: "tf" },
+            { q: "المسطحات الخضراء (Lawns) توفر فراغاً مفتوحاً للأنشطة الرياضية.", options: ["صواب", "خطأ"], a: 0, type: "tf" },
+            { q: "الجهنمية والياسمين أمثلة على الشجيرات (Shrubs).", options: ["صواب", "خطأ"], a: 1, type: "tf" },
+            { q: "اللوتس هو نبات مائي.", options: ["صواب", "خطأ"], a: 0, type: "tf" },
+            { q: "المقاعد (Seating Areas) تعتبر من عناصر الـ Softscape.", options: ["صواب", "خطأ"], a: 1, type: "tf" },
+            { q: "الهدف من تحليل الموقع هو تحديد التحديات والإمكانيات.", options: ["صواب", "خطأ"], a: 0, type: "tf" },
+            { q: "استخدام النباتات المحلية يقلل من احتياجات الصيانة والري.", options: ["صواب", "خطأ"], a: 0, type: "tf" },
+            { q: "التلال والميول (Landform) تعتبر عناصر صناعية.", options: ["صواب", "خطأ"], a: 1, type: "tf" },
+            { q: "الأسوار والبوابات تهدف لتحقيق الخصوصية والأمان.", options: ["صواب", "خطأ"], a: 0, type: "tf" },
+            { q: "البرجولات لا توفر أي نوع من الظل.", options: ["صواب", "خطأ"], a: 1, type: "tf" },
+            { q: "أساس النجاح في التصميم هو جمع المعلومات وتحليلها بدقة.", options: ["صواب", "خطأ"], a: 0, type: "tf" },
+            { q: "تنسيق الحدائق لا يؤثر على الصحة النفسية للمستخدمين.", options: ["صواب", "خطأ"], a: 1, type: "tf" },
+            { q: "تعتبر 'أماكن تجميع القمامة' من العناصر الجمالية.", options: ["صواب", "خطأ"], a: 1, type: "tf" },
+            { q: "الخرائط الطبوغرافية تحدد الارتفاعات والانحدارات.", options: ["صواب", "خطأ"], a: 0, type: "tf" },
+        ];
+
+        // دالة لعرض الأسئلة
+        function renderQuestions() {
+            questions.forEach((q, index) => {
+                let containerId = "";
+                if (q.type === "section1") containerId = "section1-container";
+                else if (q.type === "section2") containerId = "section2-container";
+                else if (q.type === "section3") containerId = "section3-container";
+                else if (q.type === "section4") containerId = "section4-container";
+                else containerId = "tf-container";
+
+                const container = document.getElementById(containerId);
+                
+                const html = `
+                    <div class="question-box" id="q-box-${index}">
+                        <div class="question-title"><span class="badge badge-warning ml-2">${index + 1}</span> ${q.q}</div>
+                        <div class="options">
+                            ${q.options.map((opt, i) => `
+                                <label>
+                                    <input type="radio" name="q${index}" value="${i}"> <span>${opt}</span>
+                                </label>
+                            `).join('')}
+                        </div>
+                        <div class="feedback" id="feedback-${index}"></div>
+                    </div>
+                `;
+                container.innerHTML += html;
+            });
+        }
+
+        // دالة إظهار/إخفاء قسم الأخطاء
+        function toggleMistakes() {
+            const report = document.getElementById('mistakesReport');
+            const btn = document.getElementById('btnShowMistakes');
+            
+            if (report.style.display === "none" || report.style.display === "") {
+                report.style.display = "block";
+                btn.innerHTML = `<i class="fas fa-eye-slash ml-2"></i> إخفاء سجل الأخطاء`;
+                report.scrollIntoView({behavior: "smooth"});
+            } else {
+                report.style.display = "none";
+                btn.innerHTML = `<i class="fas fa-exclamation-triangle ml-2"></i> عرض سجل الأخطاء وتصحيحها`;
+            }
+        }
+
+        // حساب النتيجة وتوليد تقرير الأخطاء
+        function calculateResult() {
+            let score = 0;
+            let allAnswered = true;
+            let mistakesHTML = '';
+
+            questions.forEach((q, index) => {
+                const selected = document.querySelector(`input[name="q${index}"]:checked`);
+                const feedbackDiv = document.getElementById(`feedback-${index}`);
+                const qBox = document.getElementById(`q-box-${index}`);
+                
+                // إعادة تهيئة الستايل
+                qBox.classList.remove('correct-box', 'wrong-box');
+                feedbackDiv.style.display = 'none';
+
+                let userAnswerText = "لم يتم الإجابة";
+                let isCorrect = false;
+
+                if (selected) {
+                    const val = parseInt(selected.value);
+                    userAnswerText = q.options[val];
+                    if (val === q.a) {
+                        score++;
+                        isCorrect = true;
+                        qBox.classList.add('correct-box');
+                        feedbackDiv.innerHTML = `<i class="fas fa-check-circle"></i> <strong>إجابة صحيحة!</strong>`;
+                        feedbackDiv.style.color = '#155724';
+                        feedbackDiv.style.backgroundColor = '#d4edda';
+                    } else {
+                        qBox.classList.add('wrong-box');
+                        feedbackDiv.innerHTML = `
+                            <i class="fas fa-times-circle"></i> <strong>إجابة خاطئة.</strong>
+                            <br>الإجابة الصحيحة هي: <span class="text-success font-weight-bold">${q.options[q.a]}</span>
+                        `;
+                        feedbackDiv.style.color = '#721c24';
+                        feedbackDiv.style.backgroundColor = '#f8d7da';
+                    }
+                    feedbackDiv.style.display = 'block';
+                } else {
+                    allAnswered = false;
+                    qBox.classList.add('wrong-box');
+                }
+
+                // إضافة للسجل إذا كانت خطأ أو لم يتم الإجابة
+                if (!isCorrect) {
+                    mistakesHTML += `
+                        <div class="mistake-card">
+                            <div class="mistake-question"><span class="badge badge-danger ml-2">سؤال ${index + 1}</span> ${q.q}</div>
+                            <div class="answer-comparison">
+                                <div class="user-answer"><i class="fas fa-times ml-2"></i> إجابتك: ${userAnswerText}</div>
+                                <div class="correct-answer-text"><i class="fas fa-check ml-2"></i> الصحيح: ${q.options[q.a]}</div>
+                            </div>
+                        </div>
+                    `;
+                }
+            });
+
+            if(!allAnswered) {
+                alert("انتبه: لم تقم بالإجابة على جميع الأسئلة!");
+            }
+
+            // عرض النتيجة
+            const resultBox = document.getElementById('resultBox');
+            const scoreDisplay = document.getElementById('scoreDisplay');
+            const scoreMessage = document.getElementById('scoreMessage');
+            const btnShowMistakes = document.getElementById('btnShowMistakes');
+            const mistakesList = document.getElementById('mistakesList');
+
+            resultBox.style.display = 'block';
+            scoreDisplay.innerText = `${score} / ${questions.length}`;
+
+            // التعامل مع زر الأخطاء
+            if (score === questions.length) {
+                mistakesList.innerHTML = "";
+                btnShowMistakes.style.display = "none";
+                document.getElementById('mistakesReport').style.display = "none";
+                scoreMessage.innerText = "ماشاء الله! إجابات كاملة صحيحة. لا توجد أخطاء لعرضها.";
+                scoreMessage.style.color = "#28a745";
+            } else {
+                mistakesList.innerHTML = mistakesHTML;
+                btnShowMistakes.style.display = "inline-block";
+                document.getElementById('mistakesReport').style.display = "none"; // نخفيه في البداية
+                
+                const percentage = (score / questions.length) * 100;
+                if (percentage >= 75) {
+                    scoreMessage.innerText = "جيد جداً! لديك بعض الأخطاء البسيطة.";
+                    scoreMessage.style.color = "#ffc107";
+                } else {
+                    scoreMessage.innerText = "تحتاج لمراجعة المحاضرة، لديك عدة أخطاء.";
+                    scoreMessage.style.color = "#dc3545";
+                }
+            }
+
+            resultBox.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // تشغيل
+        renderQuestions();
+
+    </script>
+</body>
+</html>
